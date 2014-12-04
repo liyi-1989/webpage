@@ -53,24 +53,50 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 
 
 <center> <h1>
-2014年10月29日
+2014年12月03日
 </h1> </center>
 <center> <h4>
 <a href="index.html">back to blog</a>
 </h4> </center>
 
-
-<p>今天学到的东西</p>
+<p>今天主要和亚乐初步搞明白了github上面怎么共同协作。说初步是因为没有涉及到branch，只是master之间的沟通。有些东西还是自己理解了之后才能运用，自己理解的方式和书上讲的还是有很大差别的，或者说这个东西就没什么书讲。</p>
 <ul>
-<li><p>今天了解一个Matlab的命令： <code>addpath('./equitability-code/')</code> 是把文件夹加入到工作路径中去了，这样里面的函数就可以直接调用。相对的rmpath是删去某个路径，用法一样。</p></li>
-<li><p>这几天开始看The elements of integration这本书，复习一下实变函数。每次看都有新的体会，之前学得太不扎实了。上一次看是理解到了测度的概念，或者说是勒贝格测度和勒贝格-斯蒂阶测度的理解。基本上就是物理上的密度的概念。虽然都是一条直线，但是每个点的（密度）值不同，所以是个二维的图像，即用一个函数<span class="math">\(f(x)\)</span>，也就是所谓的概率密度函数（在线段上的积分）来表示每个线段的长度（或者密度）。与此对应的就是单调递增<span class="math">\(F(x)\)</span>在两个端点的差，一个道理。</p></li>
-<li><p>这次理解到的关于测度的是为什么它是一个集函数，是不是它其实也只是普通的函数？不是。如果是普通函数，一个数有一个值，而集函数，一个集合有一个值（表示集合的大小），这个值并不是每个点的拼凑，不是像是取原像似的有好多点的组合而已。这个值，是集合的属性，也就是说一个集合才能谈论它的大小。所以它的取值点是集合，所以定义域是集合的collection，是<span class="math">\(\sigma\)</span>代数。</p></li>
-<li><p>这就导致了一个问题，集函数和函数表示上的区别。函数是没有冗余信息的，给定<span class="math">\(x\)</span>，我们算<span class="math">\(f(x)\)</span>的值。一个<span class="math">\(x\)</span>算完了，算下一个<span class="math">\(x\)</span>的值。但是集函数不一样，它有很多的冗余信息，因为好多集合都是overlap的，我们要在每个集合上都定义它的值。所以这就很浪费定义，同时也容易不consistency。所以这就涉及到了如何定义测度。答案就是<span class="math">\(\sigma\)</span>可加性的那些定义。</p></li>
-<li><p>今天知道了那个MI的那个binary的文件是不能在Windows上运行的，所以要在MAC或者Linux下面才能运行。</p></li>
-<li><p>用SSH登录了同学的机器，129.10.53.230。用Windows登录后要想出Matlab的GUI，貌似要开着什么Xming，然后Putty里选上x11之类的东西。不知道是什么东西，但是成功了。目的是为了解决上面的问题。</p></li>
+<li>两个人协作，两个身份，领导和小弟。每个人又有两个地方，本地电脑和远程托管地。所以，一共涉及四个地方：
+<ol style="list-style-type: decimal">
+<li><strong>领导的本地</strong>：首先，领导在自己的电脑上搞点初始的</li>
+<li><strong>领导的远程</strong>：然后，领导把开始工作传到（领导的）远程（比如github）</li>
+<li><strong>小弟的远程</strong>：接着，小弟从（小弟的）远程folk领导的远程</li>
+<li><strong>小弟的本地</strong>：最后，小弟从自己的远程clone到自己的本地</li>
+</ol></li>
+<li><p>以上共同开发的环境就创建好了。也就是说，四个地方的文件都同步好了。注意领导与小弟的沟通是通过远程的folk来实现的（当然private repo的话，领导要先share给小弟）。</p></li>
+<li>对于以上四个节点，<strong>小弟</strong>需要关心的有三个：<strong>领导的远程</strong>，<strong>小弟的远程</strong>，<strong>小弟的本地</strong>。工作流程为：
+<ol style="list-style-type: decimal">
+<li>（从领导那）接活：<strong>领导的远程</strong>–pull–&gt;<strong>小弟的本地</strong><code>小弟本地直接从领导那接活，那小弟远程还有用么？</code></li>
+<li>保存到自己的远程：<strong>小弟的本地</strong>–push–&gt;<strong>小弟的远程</strong></li>
+<li>（往领导那）交活：<strong>小弟的远程</strong>–pull request–&gt;<strong>领导的远程</strong><code>有用，小弟通过小弟远程来交活（pull request）</code>【本质：小弟不能直接push到领导那】</li>
+</ol></li>
+<li>对于以上四个节点，<strong>领导</strong>需要关心的有三个： <strong>小弟的远程</strong>，<strong>领导的远程</strong>，<strong>领导的本地</strong>。工作流程为：
+<ol style="list-style-type: decimal">
+<li>（从小弟那）收活：<strong>小弟的远程</strong>–被merge–&gt;<strong>领导的远程</strong></li>
+<li>【若上一步无冲突】保存到自己的本地：<strong>领导的远程</strong>–pull–&gt;<strong>领导的本地</strong></li>
+<li>【若上一步有冲突】保存到自己的本地：<strong>小弟的远程</strong>–pull–&gt;<strong>领导的本地</strong>（手动修改冲突）</li>
+<li>至此，领导的本地是最新版本的文件。</li>
+</ol></li>
+<li><p>以此类推。</p></li>
+<li>其实说简单也简单，真正干起活来，就是：
+<ol style="list-style-type: decimal">
+<li>pull最新文件【<strong>领导的远程</strong>–&gt;<strong>小弟的本地</strong>】（用git）</li>
+<li>要有冲突解决冲突【<strong>小弟的本地</strong>】（在干活，吸取别人新代码）</li>
+<li>自己写代码【<strong>小弟的本地</strong>】（在干活，自己写代码）</li>
+<li>push到自己的远程【<strong>小弟的本地</strong>–&gt;<strong>小弟的远程</strong>】（用git）</li>
+<li>pull request交活【<strong>小弟的远程</strong>–&gt;<strong>领导的远程</strong>】（用git） 这么几件事。</li>
+</ol></li>
+<li>一点总结：
+<ul>
+<li>想pull，谁都能pull谁。</li>
+<li>想push，（自己当然都能push自己），领导没必要push给小弟，小弟不能push给领导（要通过send pull request）。</li>
+</ul></li>
 </ul>
-<p>下午去开了那个会，<a href="http://www.northeastern.edu/synchrony/">Tarik</a> 给我们做了他们海洋生物学的报告。貌似是每个PI轮着做报告。希望能有点什么进展吧。</p>
-<p>之后又讨论了一下那个feature selection的paper具体怎么做simulation。晚上本来想回家的，结果到了Mass Ave那站就停车了，因为什么medical reason。所以乘客就都下了车，我回学校吃的。</p>
 
 
 </div>
